@@ -1,0 +1,116 @@
+<?xml version="1.0"?>
+<odoo>
+    <data>
+            <record model="ir.ui.view" id="pay_th_form_view">
+                <field name="name">hr.pay.th.form</field>
+                <field name="model">hr.payroll.th</field>
+                <field name="arch" type="xml">
+                 <form>
+
+                        <sheet>
+                            <group>
+                                <field name="name" />
+                                <group col="2">
+
+                                    <field name="period_id" required ='1'/>
+                                    <field name="sso_name" />
+                                    <field name="branch_sso"/>
+                                </group>
+
+
+
+
+                            </group>
+                            <notebook>
+
+                                <page string="รายรับ">
+
+
+                                    <field name="pay_th_line_ids" colspan="4" nolabel="1" >
+                                        <tree editable="bottom" >
+                                            <field name="employee_ids" string="ชื่อ-สกุล"/>
+                                            <field name="company_id" invisible="1"/>
+                                            <field name="salary_base" string="ฐานเงินเดือน"/>
+                                            <field name="quantity_day" string="เวลาทำงาน"/>
+                                            <field name="sum_pay" string="ค่าจ้างสุทธิ"/>
+                                            <field name="other_income" string="รายได้อื่น"/>
+                                            <field name="diligence" string="เบี้ยขยัน"/>
+                                            <field name="total_receipts" string="รายรับรวม"/>
+                                        </tree>
+
+                                    </field>
+                                </page>
+
+                                 <page string="รายการหัก">
+
+
+                                    <field name="pay_th_lineming"  >
+                                        <tree editable="bottom" >
+
+
+                                            <!--<field name="amount_sso" string="เงินสมทบ"/>-->
+                                            <!--<field name="rate" invisible="1"/>-->
+                                            <!--<field name="tax" string="ภาษีหัก ณ ที่จ่าย"/>-->
+                                            <field name="other_broken"/>
+                                            <!--<field name="total_deduction"/>-->
+                                            <!--<field name="pay_total"/>-->
+
+
+
+                                        </tree>
+
+                                    </field>
+                                </page>
+
+                            </notebook>
+
+
+
+                        </sheet>
+
+                 </form>
+                </field>
+            </record>
+
+         <record model="ir.ui.view" id="pay_th_tree_view">
+                <field name="name">hr.pay.th.tree</field>
+                <field name="model">hr.payroll.th</field>
+                <field name="arch" type="xml">
+                 <tree>
+                     <field name="period_id" />
+
+
+                 </tree>
+                </field>
+            </record>
+
+
+
+
+
+
+        <!-- ***************** suggestion ******************* -->
+        <record model="ir.actions.act_window" id="pay_th_action">
+            <field name="name">pay.th.action</field>
+            <field name="res_model">hr.payroll.th</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+
+        </record>
+
+
+        <menuitem name="ค่าจ้างเงินเดือน"
+                  id="pay_menu1"
+                  parent="payroll_th_menu"
+                  sequence="1"/>
+
+        <menuitem id="pay_th" name="คำนวนค่าจ่าง และเงินสมทบ"
+                  parent="pay_menu1"
+                  action="pay_th_action"
+                  sequence="1"/>
+
+
+
+    </data>
+</odoo>

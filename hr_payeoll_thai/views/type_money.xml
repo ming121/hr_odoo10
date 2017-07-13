@@ -1,0 +1,58 @@
+<?xml version="1.0"?>
+<odoo>
+    <data>
+
+
+            <record model="ir.ui.view" id="type_money_tree_view">
+                <field name="name">type.money.tree</field>
+                <field name="model">hr.payroll.money.type</field>
+                <field name="arch" type="xml">
+                    <tree>
+
+                        <field name="code"/>
+                        <field name="name"/>
+
+                    </tree>
+                </field>
+            </record>
+
+             <record model="ir.ui.view" id="type_money_from_view">
+                <field name="name">type.money.from</field>
+                <field name="model">hr.payroll.money.type</field>
+                <field name="arch" type="xml">
+                    <form>
+
+                        <field name="code"/>
+                        <field name="name"/>
+
+                    </form>
+                </field>
+            </record>
+
+
+
+
+        <!-- ***************** suggestion ******************* -->
+        <record model="ir.actions.act_window" id="type_money_action">
+            <field name="name">type.money.action</field>
+            <field name="res_model">hr.payroll.money.type</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <!--field name="domain">[('money_type','=',plus)]</field-->
+            <!--field name="context">{'default_money_type':'plus'}</field-->
+
+        </record>
+
+
+        <menuitem id="type_money" name="เงินเพิ่ม/เงินหัก"
+                  parent="pay_config_menu"
+
+                  sequence="2"/>
+
+        <menuitem id="money_plus" name="เพิ่ม / แก้ไข รายชื่อเงินเพิ่ม"
+                  parent="type_money"
+                  action="type_money_action"
+                  sequence="2"/>
+    </data>
+</odoo>

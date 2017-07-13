@@ -1,0 +1,4 @@
+import hr_payroll_th_config
+
+import hr_payroll_th
+import hr_employee

@@ -1,0 +1,77 @@
+<?xml version="1.0"?>
+<odoo>
+    <data>
+            <record model="ir.ui.view" id="hr_payroll_year_form_view">
+                <field name="name">hr.payroll.year.form</field>
+                <field name="model">hr.payroll.year</field>
+                <field name="arch" type="xml">
+                 <form>
+
+                        <sheet>
+
+                            <group>
+                                <field name="name" required ='1'/>
+                            </group>
+
+                            <notebook>
+                                <page string="Period">
+                                    <field name="line_ids" >
+                                        <tree editable="bottom">
+                                            <field name="name"/>
+                                            <field name="date_from" />
+                                            <field name="date_to"/>
+                                            <field name="payroll_name"/>
+
+                                        </tree>
+
+                                    </field>
+                                </page>
+                            </notebook>
+
+                        </sheet>
+
+                 </form>
+                </field>
+            </record>
+
+            <record model="ir.ui.view" id="request_wh_tree_view">
+                <field name="name">request.wh.tree</field>
+                <field name="model">hr.payroll.year</field>
+                <field name="arch" type="xml">
+                    <tree>
+                        <field name="name"/>
+
+                    </tree>
+                </field>
+            </record>
+
+
+
+
+        <!-- ***************** suggestion ******************* -->
+        <record model="ir.actions.act_window" id="th_pay_config_action">
+            <field name="name">th.pay.config.action</field>
+            <field name="res_model">hr.payroll.year</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+
+        </record>
+
+
+
+        <menuitem id="payroll_th_menu" name="ระบบเงินเดือนไทย"
+                  sequence="99"/>
+
+
+        <menuitem id="pay_config_menu"
+                  name="ตั้งค่า"
+                  parent="payroll_th_menu"/>
+
+        <menuitem id="pay_period" name="-กำหนดรอบจ่ายค่าจ้าง"
+                  parent="pay_config_menu"
+                  action="th_pay_config_action"
+                  sequence="2"/>
+
+    </data>
+</odoo>

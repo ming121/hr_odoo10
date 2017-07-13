@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <record id="ming_view_employee_form" model="ir.ui.view">
+            <field name="name">ming.view.employee.form</field>
+            <field name="model">hr.employee</field>
+            <field name="inherit_id" ref="hr.view_employee_form"/>
+            <field name="arch" type="xml">
+
+                <field name="name" position="before">
+	            	<field name="name_type"/>
+				</field>
+
+
+
+                <field name="identification_id" position="attributes">     <!--เปลี่ยนเปลงเนื้อหา ฟิลเดิม -->
+		    		<attribute name="string">เลขประจำตัวประชาชน</attribute>
+                </field>
+
+                <field name="passport_id" position="replace"></field>
+                <field name="address_home_id" position="attributes">
+                    <attribute name="invisible">1</attribute>
+                </field>
+
+                <field name="bank_account_id" position="after">
+		    		<field name="bank_id_name" required="True"/>
+                    <field name="bank_brach_name" />
+                </field>
+
+                <field name="address_home_id" position="after">
+                            <field name="day_startwroking" string="วันเริ่มงาน" required="True"/>
+                            <field name="date_resign" string="วันออกงาน" />
+                            <field name="type_resing"  />
+                            <field name="pay" string="อัตราค่าจ้าง" />
+                            <field name="pay_type"/>
+                            <field name="with_holding" string="ภาษีหัก ณ ที่จ่าย" />
+
+                </field>
+            </field>
+        </record>
+
+
+        <!--เพิ่มรายการเงินเพิ่มเงินหัก -->
+
+        <record id="view_inherit_money" model="ir.ui.view">
+            <field name="name">hr.inherit.money</field>
+            <field name="model">hr.employee</field>
+            <field name="inherit_id" ref="hr.view_employee_form"/>
+            <field name="arch" type="xml">
+
+                <xpath expr="//page[@name='hr_settings']" position="after">
+
+                        <page string="เงินเพิ่ม/เงินหัก" >
+                            <group >
+                                <field name="money_plus_ids" >
+
+                                    <tree editable="bottom">
+                                        <field name="payroll_money_ids" />
+
+                                        <field name="quantity"/>
+                                    </tree>
+
+
+                                </field>
+                             </group>
+                            <group >
+                                <field name="money_deduct_ids" >
+
+                                    <tree editable="bottom">
+
+                                        <field name="payroll_money_ids"/>
+                                        <field name="quantity"/>
+                                    </tree>
+
+
+                                </field>
+                             </group>
+
+
+                        </page>
+
+
+
+                </xpath>
+            </field>
+        </record>
+    </data>
+</odoo>
