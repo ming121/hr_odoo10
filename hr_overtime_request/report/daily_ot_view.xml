@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+
+
+            <record id="view_report_ot_tree" model="ir.ui.view">
+                <field name="name">report.ot.tree</field>
+                <field name="model">report.ming.ot</field>
+                <field name="arch" type="xml" >
+                    <tree string="ot" >
+                        <field name="name"/>
+                        <field name="ot_type"/>
+                        <field name="day_from"/>
+                        <field name="day_ot"/>
+                        <field name="number_of_hours"/>
+                        <field name="notes"/>
+
+                    </tree>
+                </field>
+            </record>
+
+            <record id="view_report_ot_graph" model="ir.ui.view">
+                <field name="name">report.ot.graph</field>
+                <field name="model">report.ming.ot</field>
+                <field name="arch" type="xml">
+                    <graph string="ot" type="bar" >
+                        <field name="name" type="row"/>
+                        <field name="day_from" type="measure"/>
+                        <field name="number_of_hours" type="col"/>
+
+                    </graph>
+                </field>
+            </record>
+
+
+            <record model="ir.ui.view" id="view_repor_ot_filter">
+                <field name="name">report.ot.filter</field>
+                <field name="model">report.ming.ot</field>
+                <field name="arch" type="xml">
+                    <search string="Hr ot Search">
+
+                        <!--<filter icon="terp-stock_align_left_24" string="ot" name="my_atten_punch" domain="[('name.user_id.id', '=', uid)]" />-->
+                        <!--<field name="name"/>-->
+                        <!--<field name="name" string="Sales Order" filter_domain="['|',('name','ilike',self),('client_order_ref','ilike',self)]"/>-->
+                    <!--<field name="partner_id" operator="child_of"/>-->
+                    <!--<field name="user_id"/>-->
+                    <!--<field name="team_id" string="Sales Team"/>-->
+                    <!--<field name="project_id"/>-->
+                    <!--<field name="product_id"/>-->
+                    <!--<filter string="My Orders" domain="[('user_id','=',uid)]" name="my_sale_orders_filter"/>-->
+                    <!--<separator/>-->
+                    <!--<filter string="Unread Messages" name="message_needaction" domain="[('message_needaction','=',True)]"/>-->
+                    <group expand="0" string="Group By">
+                        <filter string="พนักงาน" domain="[]" context="{'group_by':'name'}"/>
+                        <filter string="day" domain="[]" context="{'group_by':'day_from'}"/>
+                    </group>
+
+                    </search>
+                </field>
+            </record>
+
+            <record id="action_ot_report_all" model="ir.actions.act_window">
+                <field name="name">ot Analysis</field>
+                <field name="res_model">report.ming.ot</field>
+                <field name="view_type">form</field>
+                <field name="view_mode">tree,graph</field>
+                <field name="search_view_id" ref="view_repor_ot_filter"/>
+                <field name="limit">100</field>
+
+            </record>
+
+           
+            
+            <menuitem action="action_ot_report_all"
+                      id="menu_report_ot_all"
+                      parent="menu_overtime_report"
+                      sequence="10" name="ภาพรวม"/>
+    </data>
+</odoo>

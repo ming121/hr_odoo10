@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+       <record model="ir.ui.view" id="type_ot_tree">
+            <field name="name">type.overtime.tree</field>
+            <field name="model">type.ot</field>
+            <field name="arch" type="xml">
+                <tree>
+                    <field string="ลักษณะการจ่ายค่าล่วงเวลา" name="name"  />
+                    <field string="จำนวน" name="amount" />
+
+                </tree>
+            </field>
+        </record>
+
+        <record model="ir.ui.view" id="type_ot_form">
+            <field name="name">type.overtime.form</field>
+            <field name="model">type.ot</field>
+            <field name="arch" type="xml">
+                <form>
+                    <sheet>
+                        <group>
+                            <field  string="ลักษณะการจ่ายค่าล่วงเวลา" name="name" />
+                        </group>
+                        <group>
+                            <field  string="จำนวน" name="amount" />
+                        </group>
+                    </sheet>
+
+                </form>
+            </field>
+        </record>
+
+
+
+        <record model="ir.actions.act_window" id="type_ot">
+            <field name="name">Type.Overtime</field>
+            <field name="res_model">type.ot</field>
+            <field name="view_mode">tree,form</field>
+            <field name="view_type">form</field>
+            <!--field name="view_id" ref="edit_ot_new"/-->
+            <field name="context">{}</field>
+
+        </record>
+
+        <menuitem name="ตั้งค่าโอที" parent="menu_open_ot" id="menu_config_ot" />
+        <menuitem name="- ลักษณะการทำงานล่วงเวลา" parent="menu_config_ot" id="menu_type_ot" action="type_ot" sequence="99"/>
+
+
+    </data>
+</odoo>

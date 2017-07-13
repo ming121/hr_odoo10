@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="overtime_report_view" model="ir.ui.view">
+        <field name="name">Overtime Report</field>
+        <field name="model">report.overtime</field>
+        <field name="arch" type="xml">
+        <form string="Report Overtime">
+            <group>
+                <field name="department_ids" widget="many2many_tags" options="{'no_create': True}"/>
+            </group>
+             <group col="4">
+                <field name="date_from"/>
+                <field name="date_to"/>
+            </group>
+
+            <footer>
+                <button name="check_report" string="Print" type="object" default_focus="1" class="oe_highlight"/>
+                or
+                <button string="Cancel" class="oe_link" special="cancel" />
+            </footer>
+        </form>
+        </field>
+    </record>
+
+    <record id="overtime_report_menu" model="ir.actions.act_window">
+        <field name="name">Overtime Report</field>
+        <field name="res_model">report.overtime</field>
+        <field name="view_type">form</field>
+        <field name="view_mode">form</field>
+        <field name="view_id" ref="overtime_report_view"/>
+        <field name="target">new</field>
+    </record>
+
+
+
+    <!--<record id="accounting_report_view" model="ir.ui.view">-->
+        <!--<field name="name">Accounting Report</field>-->
+        <!--<field name="model">accounting.report</field>-->
+        <!--<field name="inherit_id" ref="account.account_common_report_view"/>-->
+        <!--<field name="arch" type="xml">-->
+            <!--<field name="target_move" position="before">-->
+                <!--<field name="account_report_id" domain="[('parent_id','=',False)]"/>-->
+            <!--</field>-->
+            <!--<field name="target_move" position="after">-->
+                <!--<field name="enable_filter"/>-->
+                <!--<field name="debit_credit" attrs="{'invisible': [('enable_filter','=',True)]}"/>-->
+            <!--</field>-->
+            <!--<field name="journal_ids" position="after">-->
+                <!--<notebook tabpos="up" colspan="4">-->
+                    <!--<page string="Comparison" name="comparison" attrs="{'invisible': [('enable_filter','=',False)]}">-->
+                        <!--<group>-->
+                            <!--<field name="label_filter" attrs="{'required': [('enable_filter', '=', True)]}"/>-->
+                            <!--<field name="filter_cmp"/>-->
+                        <!--</group>-->
+                        <!--<group string="Dates" attrs="{'invisible':[('filter_cmp', '!=', 'filter_date')]}">-->
+                            <!--<field name="date_from_cmp" attrs="{'required':[('filter_cmp', '=', 'filter_date')]}"/>-->
+                            <!--<field name="date_to_cmp" attrs="{'required':[('filter_cmp', '=', 'filter_date')]}"/>-->
+                        <!--</group>-->
+                    <!--</page>-->
+                <!--</notebook>-->
+            <!--</field>-->
+            <!--<field name="journal_ids" position="replace"/>-->
+        <!--</field>-->
+    <!--</record>-->
+    <!---->
+
+    <!--<record id="action_account_report" model="ir.actions.act_window">-->
+        <!--<field name="name">Financial Reports</field>-->
+        <!--<field name="res_model">accounting.report</field>-->
+        <!--<field name="type">ir.actions.act_window</field>-->
+        <!--<field name="view_type">form</field>-->
+        <!--<field name="view_mode">form</field>-->
+        <!--<field name="view_id" ref="accounting_report_view"/>-->
+        <!--<field name="target">new</field>-->
+    <!--</record>-->
+
+    <menuitem id="menu_overtime_report"
+              name="Overtime Report"
+              parent="menu_open_ot"
+              sequence="100"/>
+
+    <menuitem id="menu_overtime_report_1"
+              name="ระเอียด"
+              action="overtime_report_menu"
+              parent="menu_overtime_report"
+              sequence="99"/>
+
+</odoo>

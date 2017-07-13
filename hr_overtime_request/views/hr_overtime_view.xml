@@ -1,0 +1,189 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <record model="ir.ui.view" id="edit_ot_new">
+            <field name="name">hr.overtime.form</field>
+            <field name="model">hr.overtime</field>
+            <field name="arch" type="xml">
+                <form string="Overtimes">
+                    <header>
+                        <button string="ตีกลับคำขอ" name="ot_refuse" states="confirm,approve_by_department" type="object"  />
+                        <button string="ยกเลิก" name="ot_cancel" states="draft" type="object" />
+                        <button string="ขออนุมัติ" class="oe_highlight" name="ot_confirm" states="draft" type="object" />
+                        <button string="หัวหน้างาน / ผจก อนุมัติ" class="oe_highlight"  name="department_approval" states="confirm" type="object" />
+                        <button string="HR ตรวจสอบ" class="oe_highlight"  name="hr_ot_validate" states="approve_by_department" type="object" />
+                        <button string="แก้ไข" name="set_to_draft" states="refuse,cancel,confirm" type="object" />
+                        <button string="HR แก้ไข" class="oe_highlight"  name="hr_ot_draft" states="validate" type="object" />
+                        <field name="state" widget="statusbar"
+                               statusbar_visible ="draft,confirm,validate,approve_by_department"
+                               statusbar_colors='{"confirm":"blue","validate1":"blue","refuse":"red"}' colspan="2" />
+                    </header>
+                    <sheet>
+                        <div class="oe_title">
+                            <label for="employee_id" class="oe_edit_only" />
+                            <h2>
+                                <field name="employee_id"/>
+                            </h2>
+                        </div>
+                        <group>
+                            <group>
+                                <field name="date_from" required="1" /><!--Removed on_change="onchange_date_from(date_to, date_from)"-->
+                                <field name="department_id" />
+                                <field name="manager_id" />
+
+                                <field name="number_of_hours" />
+                                <field name="company_id" groups="base.group_multi_company" widget="selection" />
+                            </group>
+                            <group>
+                                <field name="date_to" required="1" /><!--Removed on_change="onchange_date_from(date_to, date_from)"-->
+                                <field name="category_id" invisible="True" attrs="{'readonly': [('state', '!=', 'draft')]}"/>
+                                <field name="ot_type" required="1" string="Type OT" widget="selection" attrs="{'readonly': [('state', '!=', 'draft')]}"/>   <!--  Add more  -->
+                                <field name="include_payroll" attrs="{'readonly': [('state', 'in', ('validate', 'cancel'))]}"/>
+
+                                <field name="hr_approve_date" string="วันอนุมัติ OT" readonly="1"/>
+                                <field name="approve_hr_manager_id" string="อนุมัติโดย"/>
+                                <!--field name="approve_dept_manager_id"/>
+                                <field name="multiple_overtime_id" readonly="True"/>
+                                <field name="department_manager_id" invisible='True'/   -->
+                            </group>
+                        </group>
+                        <notebook string='Notes'>
+                                <page string="รายละเอียด">
+                                    <field name="notes" attrs="{'readonly': [('state', '!=', 'draft')]}"/>
+                                </page>
+                            </notebook>
+                    </sheet>
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids" widget="mail_followers" groups="base.group_user" />
+                        <field name="message_ids" widget="mail_thread" />
+                    </div>
+                </form>
+            </field>
+        </record>
+
+        <record model="ir.ui.view" id="edit_ot_new_tree">
+            <field name="name">hr.overtime.tree</field>
+            <field name="model">hr.overtime</field>
+            <field name="arch" type="xml">
+                <tree string="Overtime" default_order='date_from desc'>
+                    <field name="employee_id" on_change="onchange_employee_id(date_from, date_from, employee_id)" />
+                    <field name="manager_id" invisible="1" />
+                    <field name="department_id"/>
+                    <field name="category_id" />
+                    <field name="number_of_hours" />
+                    <field name="date_from" invisible="0" />
+                    <field name="date_to" invisible="1" />
+                    <field name="approve_date" invisible="1" />
+                    <field name="include_payroll" />
+                    <field name="company_id" groups="base.group_multi_company" widget="selection" />
+                    <field name="state" />
+
+                </tree>
+            </field>
+        </record>
+
+
+
+        <record model="ir.actions.act_window" id="request_ot">
+            <field name="name">Overtime Requests</field>
+            <field name="res_model">hr.overtime</field>
+            <field name="view_mode">tree,form</field>
+            <field name="view_type">form</field>
+            <field name="view_id" ref="edit_ot_new_tree"/>
+            <field name="context">{}</field>
+
+        </record>
+        <menuitem name="Overtimes"  id="menu_open_ot" sequence="91"  />
+        <menuitem name="ยื่นขอทำงานล่วงเวลา" parent="menu_open_ot" id="menu_request" />
+
+        <menuitem name="- รายบุคคล" parent="menu_request" id="menu_request_ot" action="request_ot" sequence="1" />
+
+
+
+        <record model="ir.ui.view" id="edit_ot_approve_tree">
+            <field name="name">approve.overtime.tree</field>
+            <field name="model">hr.overtime</field>
+            <field name="arch" type="xml">
+                <tree string="Approve Overtime" default_order='date_from desc'>
+                    <field name="employee_id" on_change="onchange_employee_id(date_from, date_from, employee_id)" />
+                    <field name="manager_id" invisible="1" />
+                    <field name="department_id"/>
+                    <field name="category_id" />
+                    <field name="number_of_hours" />
+                    <field name="date_from" invisible="0" />
+                    <field name="date_to" invisible="1" />
+                    <field name="approve_date" invisible="1" />
+                    <field name="include_payroll" />
+                    <field name="company_id" groups="base.group_multi_company" widget="selection" />
+                    <field name="state" />
+                    <button string="Approve" name="ot_validate" states="confirm" type="object" />
+                    <button string="Refuse"  name="ot_refuse" states="confirm" type="object" />
+
+                </tree>
+            </field>
+        </record>
+
+
+
+        <record model="ir.actions.act_window" id="approve_ot">
+            <field name="name">approve.overtime</field>
+            <field name="res_model">hr.overtime</field>
+            <field name="view_mode">tree</field>
+            <field name="view_type">form</field>
+            <field name="domain">[('state','=','confirm')]</field>
+            <field name="context">{}</field>
+        </record>
+
+        <menuitem name="- รายการขออนุมัติ" parent="menu_request" id="menu_approve_ot" action="approve_ot"   />
+
+        <record model="ir.ui.view" id="hr_ot_approve_tree">
+            <field name="name">hr.approve.overtime.tree</field>
+            <field name="model">hr.overtime</field>
+            <field name="arch" type="xml">
+                <tree string="Approve Overtime" default_order='date_from desc'>
+                    <field name="employee_id" on_change="onchange_employee_id(date_from, date_from, employee_id)" />
+                    <field name="manager_id" invisible="1" />
+                    <field name="department_id"/>
+
+
+                    <field name="date_from" invisible="0" />
+                    <field name="date_to" invisible="0" />
+                    <field name="number_of_hours" />
+
+                    <field name="approve_date" invisible="1" />
+                    <field name="notes" />
+                    <field name="company_id" groups="base.group_multi_company" widget="selection" />
+                    <field name="state" />
+                    <button string="HRตรวจสอบ"   name="hr_ot_validate" states="approve_by_department" type="object" />
+                    <button string="HRแก้ไข"      name="hr_ot_draft" states="validate" type="object" />
+                </tree>
+            </field>
+        </record>
+
+
+
+        <record model="ir.actions.act_window" id="hr_ot_approve">
+            <field name="name">hr.app.overtime</field>
+            <field name="res_model">hr.overtime</field>
+            <field name="view_mode">tree,form</field>
+            <field name="view_type">form</field>
+            <field name="domain">[('state','in',('approve_by_department','validate'))]</field>
+            <field name="view_id" ref="hr_ot_approve_tree"/>
+            <field name="context">{}</field>
+        </record>
+
+
+        <menuitem name="- เจ้าหน้าที่บุคคลยื่นยัน" parent="menu_request" id="hr1_approve_ot" action="hr_ot_approve"   />
+
+
+
+
+
+
+
+
+
+
+    </data>
+</odoo>

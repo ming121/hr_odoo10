@@ -1,0 +1,130 @@
+<?xml version="1.0"?>
+<odoo>
+    <data>
+
+        <record model="ir.ui.view" id="edit_ot_new_multiple_tree">
+            <field name="name">hr.overtime.multiple.tree</field>
+            <field name="model">hr.overtime.multiple</field>
+            <field name="arch" type="xml">
+                <tree string="Overtime" default_order='date_from desc'>
+                    <field name="manager_id" invisible="1" />
+                    <field name="employee_ids"/>
+                    <field name="number_of_hours" />
+                    <field name="date_from" invisible="0" />
+                    <field name="date_to" invisible="1" />
+                    <field name="approve_date" invisible="1" />
+                    <field name="include_payroll" />
+                    <field name="company_id" groups="base.group_multi_company" widget="selection" />
+                    <field name="state" />
+                    <button string="Approve" groups="base.group_hr_manager" name="ot_validate" states="confirm" type="object" />
+                    <button string="Refuse" name="ot_refuse" states="confirm" type="object" groups="base.group_hr_manager" />
+                    <!-- <button string="Approve" groups="base.group_hr_user,base.group_hr_manager" name="ot_validate" states="confirm" type="object" />
+                    <button string="Refuse" name="ot_refuse" states="confirm" type="object" groups="base.group_hr_user,base.group_hr_manager" />-->
+                </tree>
+            </field>
+        </record>
+
+        <record id="view_hr_overtime_multiple_filter" model="ir.ui.view">
+            <field name="name">hr.overtime.multiple.select</field>
+            <field name="model">hr.overtime.multiple</field>
+            <field name="arch" type="xml">
+                <search string="Search Overtimes">
+                    <group string="Filters..">
+                        <filter name="draft_ot" icon="terp-document-new" string="Draft" domain="[('state','=','draft')]" help="Draft Overtime" />
+                        <filter name="toapprove" icon="terp-gtk-media-pause" string="To Approve By HR" domain="[('state','=','approve_by_department')]" help="Confirm Overtimes" />
+                        <filter name="toapprove_dept" icon="terp-gtk-media-pause" string="To Approve By Department" domain="[('state','=','confirm')]" help="Approve Overtimes" />
+                        <filter name="hr_approves" icon="terp-gtk-media-pause" string="Approved By HR" domain="[('state','=','validate')]" help="Confirm Overtimes" />
+                        <filter name="dept_approve" icon="terp-gtk-media-pause" string="Approved By Department" domain="[('state','=','approve_by_department')]" help="Approve Overtimes" />
+                        <filter icon="terp-dolar" string="Include In Payroll" domain="[('include_payroll','=', True)]" help="Include in Payroll" />
+                        <separator orientation="vertical" />
+                        <field name="employee_ids" />
+                        <field name="department_id" widget="selection" />
+                        <field name="category_id" widget="selection" />
+                        <field name="state" />
+                        <field name="include_payroll" />
+                    </group>
+                    <group expand="0" string="Group By...">
+                        <filter string="Managers" icon="terp-personal" name="manager_id" context="{'group_by':'manager_id'}" />
+                        <separator orientation="vertical" />
+                        <filter string="Companies" name="company_id" groups="base.group_multi_company" icon="terp-go-home" context="{'group_by':'company_id'}" />
+                        <separator orientation="vertical" />
+                        <filter string="Status" name="state" icon="terp-stock_effects-object-colorize" context="{'group_by':'state'}" />
+                        <separator orientation="vertical" />
+                        <filter string="Start Date" icon="terp-go-month" domain="[]" context="{'group_by':'date_from'}" />
+                    </group>
+                </search>
+            </field>
+        </record>
+
+        <record model="ir.ui.view" id="edit_ot_new_multiple">
+            <field name="name">hr.overtime.multiple.form</field>
+            <field name="model">hr.overtime.multiple</field>
+            <field name="arch" type="xml">
+                <form string="Overtimes">
+                    <header>
+                        <button string="Refuse" name="ot_refuse" states="confirm,approve_by_department" type="object" />
+                        <button string="Cancel" name="ot_cancel"  states="draft" type="object" />
+                        <button string="Confirm" class="oe_highlight" name="ot_confirm" states="draft" type="object" /> 
+                        <!-- 
+                        <button string="Department Approve" class="oe_highlight" groups="base.group_hr_manager" name="department_approval" states="confirm" type="object" />
+                        <button string="HR Approve" class="oe_highlight" groups="hr_overtime_request.department_manager_overtime" name="hr_approve" states="approve_by_department" type="object" />
+                         -->
+                        <button string="Set to Draft" name="set_to_draft" states="refuse,cancel" type="object" groups="base.group_hr_user" />
+                        <field name="state" widget="statusbar" statusbar_visible="draft,confirm,validate,approve_by_department" statusbar_colors='{"confirm":"blue","validate1":"blue","refuse":"red"}' colspan="2" />
+                    </header>
+                    <sheet>
+                        <group>
+                            <field name="department_id" invisible="False" attrs="{'readonly': [('state', '!=', 'draft')]}" />
+                            <field name="employee_ids" colspan="4" widget="many2many_tags" attrs="{'readonly': [('state', '!=', 'draft')]}" domain="[('department_id', '=', department_id)]"/>
+                        </group>
+                         <group>
+                            <group>
+                                <field name="date_from" required="1" attrs="{'readonly': [('state', '!=', 'draft')]}"/><!--Removed on_change="onchange_date_from(date_to, date_from)"-->
+
+                                <field name="manager_id"  invisible="True" attrs="{'readonly': [('state', '!=', 'draft')]}"/>
+                                <field name="hr_approve_date"/>
+                                <field name="approve_hr_manager_id"/>
+                                <field name="number_of_hours" attrs="{'readonly': [('state', '!=', 'draft')]}"/>
+                                <field name="company_id" groups="base.group_multi_company" widget="selection" attrs="{'readonly': [('state', '!=', 'draft')]}"/>
+                            </group>
+                            <group>
+                                <field name="date_to" required="1" attrs="{'readonly': [('state', '!=', 'draft')]}"/><!--Removed on_change="onchange_date_from(date_to, date_from)"-->
+                                <field name="category_id"  invisible="True" attrs="{'readonly': [('state', '!=', 'draft')]}"/>
+                                <field name="ot_type" required="1" string="Type OT" widget="selection" attrs="{'readonly': [('state', '!=', 'draft')]}"/>   <!--  Add more  -->                                
+                                <field name="include_payroll" attrs="{'readonly': [('state', 'in', ('validate', 'cancel'))]}"/> 
+                                <field name="approve_date"/> 
+                                <field name="approve_dept_manager_id" /> 
+                                <field name="department_manager_id"/>
+                            </group>
+                        </group>
+                        <notebook string='Notes'>
+                                <page string="Notes">
+                                    <field name="notes" attrs="{'readonly': [('state', '!=', 'draft')]}"/>
+                                </page>
+                            </notebook>
+                    </sheet>
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids" widget="mail_followers" groups="base.group_user" />
+                        <field name="message_ids" widget="mail_thread" />
+                    </div>
+                </form>
+            </field>
+        </record>
+
+        <record model="ir.actions.act_window" id="request_approve_ot_multiple">
+            <field name="name">Multiple Overtime Requests</field>
+            <field name="res_model">hr.overtime.multiple</field>
+            <field name="view_mode">tree,form</field>
+            <field name="view_type">form</field>
+            <field name="context">{'search_default_draft_ot': 1}</field>            
+            <field name="search_view_id" ref="view_hr_overtime_multiple_filter" />
+        </record>
+		<menuitem name="- ตามแผนก" parent="menu_request" id="menu_request_multiple_ot"
+			action="request_approve_ot_multiple"
+            sequence="2"/>
+
+
+
+             
+    </data>
+</odoo>
