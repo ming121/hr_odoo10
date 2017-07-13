@@ -47,13 +47,13 @@
                                     <field name="pay_th_lineming"  >
                                         <tree editable="bottom" >
 
-
-                                            <!--<field name="amount_sso" string="เงินสมทบ"/>-->
-                                            <!--<field name="rate" invisible="1"/>-->
-                                            <!--<field name="tax" string="ภาษีหัก ณ ที่จ่าย"/>-->
+                                            <field name="sso_id"/>
+                                            <field name="amount_sso" string="เงินสมทบ"/>
+                                            <field name="rate" invisible="0"/>
+                                            <field name="tax" string="ภาษีหัก ณ ที่จ่าย"/>
                                             <field name="other_broken"/>
-                                            <!--<field name="total_deduction"/>-->
-                                            <!--<field name="pay_total"/>-->
+                                            <field name="total_deduction"/>
+                                            <field name="pay_total"/>
 
 
 
