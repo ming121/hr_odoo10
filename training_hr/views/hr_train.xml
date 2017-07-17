@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+
+<odoo>
+    <data>
+
+
+        <!-- from tree-->
+  		<record model="ir.ui.view" id="hr_train_tree">
+            <field name="name">hr.train.tree</field>
+            <field name="model">hr_train</field>
+            <field name="arch" type="xml">
+                <tree string="HR Train">
+                    <field name="employee_name" />
+                    <field name="name" />
+                    <field name="date_from"/>
+                    <field name="date_to"/>
+                    <field name="number_of_hours"/>
+                    <field name="state"/>
+                </tree>
+            </field>
+        </record>
+
+        <record model="ir.ui.view" id="hr_train_form">
+            <field name="name">hr.train.tree</field>
+            <field name="model">hr_train</field>
+            <field name="arch" type="xml">
+                <form string="HR Train">
+                    <field name="employee_name" />
+                    <field name="name" />
+                    <field name="date_from"/>
+                    <field name="date_to"/>
+                    <field name="number_of_hours"/>
+                    <field name="state"/>
+                </form>
+            </field>
+        </record>
+
+
+        <record model="ir.actions.act_window" id="hr_train_action">
+            <field name="name">hr.train.action</field>
+            <field name="res_model">hr_train</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+
+
+
+        <menuitem id="manu_traning_root"
+        parent="hr.menu_hr_root"
+        action="hr_train_action"/>
+
+        <menuitem id="manu_traning_1"
+                  name="หัวข้ออบรม"
+        parent="manu_hr_traning"
+        action="hr_train_action"/>
+
+
+
+
+
+
+
+
+
+    </data>
+
+</odoo>
