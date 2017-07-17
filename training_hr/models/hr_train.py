@@ -9,7 +9,7 @@ from odoo import api, fields, models, _
 
 
 class hr_train(models.Model):
-    _name = "hr.train"
+    _name = 'hr.train'
 
 
 
@@ -19,14 +19,11 @@ class hr_train(models.Model):
     date_from = fields.Datetime(string='วันที่เริ่มอบรม', states={'draft': [('readonly', False)]}, readonly=True,
                                 default=fields.datetime.now())
     date_to = fields.Datetime(string='วันที่สินสุดการอบรม', states={'draft': [('readonly', False)]}, readonly=True)
-    department_id = fields.Many2one('employee_name.department_id', string='Department', type='many2one',
-                                    relation='hr.department', readonly=True, store=True)
+
     department_tranning = fields.Char(string='หน่วยงาน อบรม', required=False)
     place_tranning = fields.Selection([('a', 'IN'), ('b', 'OUT')], string="การอบรมภายใน/ภายนอก")
     notes = fields.Text(string='หมายเหตุ')
-    employee_name = fields.Many2many('hr.employee', 'employee_tranings', 'employee_id', 'traning_id',
-                                     string="Select Employees", required=True,
-                                     states={'validate': [('readonly', True)]})
+
     state = fields.Selection(selection=[('draft', 'สร้าง'),
                                         ('confirm', 'ยืนยันหัวข้ออบรม'),
                                         ('approve_hr', 'ดำเนินงานตามแผน'),
@@ -42,4 +39,20 @@ class hr_train(models.Model):
                                 copy=False)
     expenses_tran = fields.Selection([('0', 'ฟรี'), ('1', 'มีค่าอบรม')], string="ค่าใช้จ่ายในการอบรม", default='0')
     price_tran = fields.Char(string="ราคา")
+
+    train_line_ids = fields.One2many('hr.train.line', 'payroll_line_id', string='Pay Lines')
+
+
+class hr_train_line(models.Model):
+    _name = 'hr.train.line'
+
+    payroll_line_id = fields.Many2one('hr.train', string='HR TRAIN',
+                                      ondelete='cascade', index=True)
+
+
+    employee_ids = fields.Many2one('hr.employee', ondelete='restrict',
+                               string="Employees", required=True)
+    department_id = fields.Many2one('hr.employee.department_id', string='Department', relation='hr.department',
+                                     store=True)
+
 

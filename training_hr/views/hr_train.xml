@@ -8,10 +8,10 @@
         <!-- from tree-->
   		<record model="ir.ui.view" id="hr_train_tree">
             <field name="name">hr.train.tree</field>
-            <field name="model">hr_train</field>
+            <field name="model">hr.train</field>
             <field name="arch" type="xml">
                 <tree string="HR Train">
-                    <field name="employee_name" />
+
                     <field name="name" />
                     <field name="date_from"/>
                     <field name="date_to"/>
@@ -23,36 +23,73 @@
 
         <record model="ir.ui.view" id="hr_train_form">
             <field name="name">hr.train.tree</field>
-            <field name="model">hr_train</field>
+            <field name="model">hr.train</field>
             <field name="arch" type="xml">
                 <form string="HR Train">
-                    <field name="employee_name" />
-                    <field name="name" />
-                    <field name="date_from"/>
-                    <field name="date_to"/>
-                    <field name="number_of_hours"/>
-                    <field name="state"/>
+                    <header>  <!-- ทำเมนูสถานะ -->
+                        <button string="ย้อนกลับ" name="tran_refuse" states="confirm,approve_by_hr" type="object"  />
+                        <button string="ยกเลิก" name="tran_cancel" states="draft" type="object" />
+                        <button string="ยืนยัน" class="oe_highlight" name="traning_confirm" states="draft" type="object" />
+                        <button string="ดำเนินการอบรม" class="oe_highlight"  name="hr_approval" states="confirm" type="object" />
+                        <button string="รับทราบการอบรม" class="oe_highlight" name="mg_validate" states="approve_hr" type="object" />
+                        <button string="กลับไปร่างใหม่" name="set_to_draft" states="refuse,validate,cancel" type="object" />
+                        <field name="state" widget="statusbar" statusbar_visible="draft,confirm,validate,approve_by_hr" statusbar_colors='{"confirm":"blue","validate1":"blue","refuse":"red"}' colspan="1" />
+                    </header>
+                    <sheet>
+                        <group>
+                            <group>   <!-- ชุดฟิวที่  1 -->
+                                <field name="name" />
+                                <field name="date_from" />
+                                <field name="date_to" />
+                                <field name="number_of_hours" />
+
+                            </group>
+
+                            <group>   <!-- ชุดฟิวที่  2 -->
+
+                            	<field name="place_tranning" />
+                            	<field name="approve_dept_manager_id" />
+                            </group>
+                        </group>
+
+
+                          	<notebook >    <!-- โน็ต -->
+                              	<page string="รายรับ">
+
+
+                                    <field name="train_line_ids" colspan="4" nolabel="1" >
+                                        <tree editable="bottom" >
+                                            <field name="employee_ids" string="ชื่อ-สกุล"/>
+                                            <field name="department_id" />
+
+                                        </tree>
+
+                                    </field>
+                                </page>
+                            </notebook>
+
+                    </sheet>
                 </form>
             </field>
         </record>
 
 
         <record model="ir.actions.act_window" id="hr_train_action">
-            <field name="name">hr.train.action</field>
-            <field name="res_model">hr_train</field>
+            <field name="name">Hr_Train</field>
+            <field name="res_model">hr.train</field>
             <field name="view_type">form</field>
             <field name="view_mode">tree,form</field>
         </record>
 
 
-
         <menuitem id="manu_traning_root"
+                  name="ฝึกอบรม"
         parent="hr.menu_hr_root"
         action="hr_train_action"/>
 
         <menuitem id="manu_traning_1"
                   name="หัวข้ออบรม"
-        parent="manu_hr_traning"
+        parent="manu_traning_root"
         action="hr_train_action"/>
 
 

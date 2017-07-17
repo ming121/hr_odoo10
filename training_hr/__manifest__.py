@@ -35,7 +35,7 @@
     'depends':['hr'],
     'data' : [
 
-              # 'views/hr_train.xml',
+              'views/hr_train.xml',
               # 'report/daily_ot_view.xml',
 
               
